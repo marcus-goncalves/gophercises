@@ -6,7 +6,7 @@ package module01
 //   Reverse("cat") => "tac"
 //   Reverse("alphabet") => "tebahpla"
 //
-// First Solution - Faster
+// First Solution
 // func Reverse(word string) string {
 // 	var res strings.Builder
 // 	for i := len(word) - 1; i >= 0; i-- {
