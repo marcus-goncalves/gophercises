@@ -10,5 +10,13 @@ package module01
 //   DecToBase(14, 2) => "1110"
 //
 func DecToBase(dec, base int) string {
-	return ""
+	var res string
+	const charset = "0123456789ABCDEFG"
+	for dec > 0 {
+		rem := dec % base
+		res = string(charset[rem]) + res
+		dec = dec / base
+	}
+
+	return res
 }
