@@ -1,5 +1,7 @@
 package module01
 
+import "fmt"
+
 // Factor takes in a list of primes and a number and factors that number with
 // the provided primes.
 //
@@ -22,5 +24,17 @@ package module01
 //   Factor([], 4) // []int{4}
 //
 func Factor(primes []int, number int) []int {
-	return nil
+	var res []int
+	for _, i := range primes {
+		for number%i == 0 {
+			res = append(res, i)
+			number /= i
+		}
+	}
+
+	if number > 1 {
+		res = append(res, number)
+	}
+	fmt.Println(res)
+	return res
 }

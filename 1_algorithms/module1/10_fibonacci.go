@@ -24,6 +24,21 @@ package module01
 //   Fibonacci(7) => 13
 //   Fibonacci(14) => 377
 //
+
 func Fibonacci(n int) int {
-	return 0
+	var res int
+	nPos2 := 0
+	nPos1 := 1
+
+	if n <= 1 {
+		return n
+	}
+
+	for i := 2; i <= n; i++ {
+		res = nPos2 + nPos1
+		nPos2 = nPos1
+		nPos1 = res
+	}
+
+	return res
 }
