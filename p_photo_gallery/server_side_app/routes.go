@@ -28,8 +28,9 @@ type View struct {
 func NewView(layout string, files ...string) *View {
 	var t *template.Template
 	files = append(files,
-		"server_side_app/views/layouts/footer.html",
-		"server_side_app/views/layouts/main.html")
+		"server_side_app/views/layouts/navbar.html",
+		"server_side_app/views/layouts/main.html",
+		"server_side_app/views/layouts/footer.html")
 	t, err = template.ParseFiles(files...)
 	if err != nil {
 		panic(err)
@@ -45,32 +46,36 @@ func (route *SsRoutes) Home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 
 	// Route Logic
-	homeView := NewView("content", "server_side_app/views/home.html")
+	homeView := NewView("main", "server_side_app/views/home.html")
 
 	err = homeView.Template.ExecuteTemplate(w, homeView.Layout, nil)
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func (route *SsRoutes) Contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 
 	// Route Logic
-	contactView := NewView("content", "server_side_app/views/contact.html")
+	contactView := NewView("main", "server_side_app/views/contact.html")
 
 	err = contactView.Template.ExecuteTemplate(w, contactView.Layout, nil)
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func (route *SsRoutes) Faq(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>Hi there! FAQ Page</h1>")
 
+	// Route logic
+	faqView := NewView("main", "server_side_app/views/faq.html")
+
+	err = faqView.Template.ExecuteTemplate(w, faqView.Layout, nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (route *SsRoutes) NotFoundPage(w http.ResponseWriter, r *http.Request) {
