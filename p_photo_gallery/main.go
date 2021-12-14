@@ -28,6 +28,7 @@ func main() {
 	r.HandleFunc("/", api.Routes.Home)
 	r.HandleFunc("/contact", api.Routes.Contact)
 	r.HandleFunc("/faq", api.Routes.Faq)
+	r.HandleFunc("/signup", api.Routes.SignUp)
 	r.NotFoundHandler = http.HandlerFunc(api.Routes.NotFoundPage)
 
 	log.Fatal(http.ListenAndServe(":3000", r))
