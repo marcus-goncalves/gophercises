@@ -28,6 +28,10 @@ type View struct {
 	Layout   string
 }
 
+func (v *View) Render(w http.ResponseWriter, data interface{}) error {
+	return v.Template.ExecuteTemplate(w, v.Layout, data)
+}
+
 func layoutFiles() []string {
 	files, err := filepath.Glob(LayoutDir + "*" + TemplateExt)
 	if err != nil {
@@ -57,7 +61,7 @@ func (route *SsRoutes) Home(w http.ResponseWriter, r *http.Request) {
 	// Route Logic
 	homeView := NewView("main", "server_side_app/views/home.html")
 
-	err = homeView.Template.ExecuteTemplate(w, homeView.Layout, nil)
+	err = homeView.Render(w, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -69,7 +73,7 @@ func (route *SsRoutes) Contact(w http.ResponseWriter, r *http.Request) {
 	// Route Logic
 	contactView := NewView("main", "server_side_app/views/contact.html")
 
-	err = contactView.Template.ExecuteTemplate(w, contactView.Layout, nil)
+	err = contactView.Render(w, nil)
 	if err != nil {
 		panic(err)
 	}
