@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"path/filepath"
 )
 
 var (
-	Routes ssRoutes = &SsRoutes{}
-	err    error
+	Routes      ssRoutes = &SsRoutes{}
+	err         error
+	LayoutDir   string = "server_side_app/views/layouts/"
+	TemplateExt string = ".html"
 )
 
 type SsRoutes struct{}
@@ -25,12 +28,18 @@ type View struct {
 	Layout   string
 }
 
+func layoutFiles() []string {
+	files, err := filepath.Glob(LayoutDir + "*" + TemplateExt)
+	if err != nil {
+		panic(err)
+	}
+
+	return files
+}
+
 func NewView(layout string, files ...string) *View {
 	var t *template.Template
-	files = append(files,
-		"server_side_app/views/layouts/navbar.html",
-		"server_side_app/views/layouts/main.html",
-		"server_side_app/views/layouts/footer.html")
+	files = append(files, layoutFiles()...)
 	t, err = template.ParseFiles(files...)
 	if err != nil {
 		panic(err)
