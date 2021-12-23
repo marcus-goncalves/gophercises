@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	api "photo_gallery.com/v1/server_side_app"
+	"photo_gallery.com/v1/server_side_app/controllers"
 )
 
 // func main() {
@@ -28,7 +29,7 @@ func main() {
 	r.HandleFunc("/", api.Routes.Home)
 	r.HandleFunc("/contact", api.Routes.Contact)
 	r.HandleFunc("/faq", api.Routes.Faq)
-	r.HandleFunc("/signup", api.Routes.SignUp)
+	r.HandleFunc("/signup", controllers.NewUsers().New)
 	r.NotFoundHandler = http.HandlerFunc(api.Routes.NotFoundPage)
 
 	log.Fatal(http.ListenAndServe(":3000", r))

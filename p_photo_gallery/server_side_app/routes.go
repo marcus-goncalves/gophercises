@@ -20,7 +20,6 @@ type ssRoutes interface {
 	Home(w http.ResponseWriter, r *http.Request)
 	Contact(w http.ResponseWriter, r *http.Request)
 	Faq(w http.ResponseWriter, r *http.Request)
-	SignUp(w http.ResponseWriter, r *http.Request)
 	NotFoundPage(w http.ResponseWriter, r *http.Request)
 }
 
@@ -87,18 +86,6 @@ func (route *SsRoutes) Faq(w http.ResponseWriter, r *http.Request) {
 	faqView := NewView("main", "server_side_app/views/faq.html")
 
 	err = faqView.Render(w, nil)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func (route *SsRoutes) SignUp(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-
-	// Route logic
-	signUpView := NewView("main", "server_side_app/views/signup.html")
-
-	err = signUpView.Render(w, nil)
 	if err != nil {
 		panic(err)
 	}
