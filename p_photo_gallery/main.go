@@ -26,10 +26,13 @@ func main() {
 	r := mux.NewRouter()
 
 	// Routes
-	r.HandleFunc("/", api.Routes.Home)
-	r.HandleFunc("/contact", api.Routes.Contact)
-	r.HandleFunc("/faq", api.Routes.Faq)
-	r.HandleFunc("/signup", controllers.NewUsers().New)
+	r.HandleFunc("/", api.Routes.Home).Methods("GET")
+	r.HandleFunc("/contact", api.Routes.Contact).Methods("GET")
+	r.HandleFunc("/faq", api.Routes.Faq).Methods("GET")
+
+	r.HandleFunc("/signup", controllers.NewUsers().New).Methods("GET")
+	r.HandleFunc("/signup", controllers.NewUsers().Create).Methods("POST")
+
 	r.NotFoundHandler = http.HandlerFunc(api.Routes.NotFoundPage)
 
 	log.Fatal(http.ListenAndServe(":3000", r))
