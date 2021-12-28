@@ -11,6 +11,11 @@ type Users struct {
 	NewView *api.View
 }
 
+type SignUpForm struct {
+	Email    string `schema:"email"`
+	Password string `schema:"password"`
+}
+
 func NewUsers() *Users {
 	return &Users{
 		NewView: api.NewView("main", "server_side_app/views/users/new.html"),
@@ -24,9 +29,10 @@ func (u *Users) New(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err != nil {
+	form := SignUpForm{}
+	if err := parseForm(r, &form); err != nil {
 		panic(err)
 	}
 
-	fmt.Fprintln(w, r.PostForm)
+	fmt.Fprintln(w, form)
 }
