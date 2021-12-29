@@ -18,7 +18,7 @@ type SignUpForm struct {
 
 func NewUsers() *Users {
 	return &Users{
-		NewView: api.NewView("main", "server_side_app/views/users/new.html"),
+		NewView: api.NewView("main", "users/new"),
 	}
 }
 

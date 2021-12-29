@@ -26,9 +26,9 @@ func main() {
 	r := mux.NewRouter()
 
 	// Routes
-	r.HandleFunc("/", api.Routes.Home).Methods("GET")
-	r.HandleFunc("/contact", api.Routes.Contact).Methods("GET")
-	r.HandleFunc("/faq", api.Routes.Faq).Methods("GET")
+	r.Handle("/", controllers.NewStatic().HomeView).Methods("GET")
+	r.Handle("/contact", controllers.NewStatic().ContactView).Methods("GET")
+	r.Handle("/faq", controllers.NewStatic().FaqView).Methods("GET")
 
 	r.HandleFunc("/signup", controllers.NewUsers().New).Methods("GET")
 	r.HandleFunc("/signup", controllers.NewUsers().Create).Methods("POST")
