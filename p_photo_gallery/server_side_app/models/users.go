@@ -48,6 +48,10 @@ func (us *UserService) DestructiveReset() error {
 	return us.AutoMigrate()
 }
 
+func (us *UserService) Close() {
+	us.Close()
+}
+
 type User struct {
 	gorm.Model
 	Name  string

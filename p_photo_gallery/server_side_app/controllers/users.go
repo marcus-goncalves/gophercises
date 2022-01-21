@@ -5,10 +5,12 @@ import (
 	"net/http"
 
 	api "photo_gallery.com/v1/server_side_app"
+	"photo_gallery.com/v1/server_side_app/models"
 )
 
 type Users struct {
 	NewView *api.View
+	us      *models.UserService
 }
 
 type SignUpForm struct {
@@ -17,9 +19,10 @@ type SignUpForm struct {
 	Password string `schema:"password"`
 }
 
-func NewUsers() *Users {
+func NewUsers(us *models.UserService) *Users {
 	return &Users{
 		NewView: api.NewView("main", "users/new"),
+		us:      us,
 	}
 }
 
@@ -35,5 +38,14 @@ func (u *Users) Create(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	fmt.Fprintln(w, form)
+	user := models.User{
+		Name:  form.Name,
+		Email: form.Email,
+	}
+	if err := u.us.Create(&user); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Fprintln(w, "User: ", user)
 }
