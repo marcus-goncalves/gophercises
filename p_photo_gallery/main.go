@@ -30,6 +30,7 @@ func main() {
 	}
 
 	defer us.Close()
+	us.DestructiveReset()
 	us.AutoMigrate()
 
 	r := mux.NewRouter()
@@ -41,6 +42,9 @@ func main() {
 
 	r.HandleFunc("/signup", controllers.NewUsers(us).New).Methods("GET")
 	r.HandleFunc("/signup", controllers.NewUsers(us).Create).Methods("POST")
+
+	r.Handle("/login", controllers.NewUsers(us).LoginView).Methods("GET")
+	r.HandleFunc("/login", controllers.NewUsers(us).Login).Methods("POST")
 
 	r.NotFoundHandler = http.HandlerFunc(api.Routes.NotFoundPage)
 

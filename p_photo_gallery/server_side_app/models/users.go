@@ -3,13 +3,16 @@ package models
 import (
 	"errors"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 var (
-	UserNotFound = errors.New("models: Resources not found")
-	InvalidId    = errors.New("models: ID provided is invalid")
+	UserNotFound  = errors.New("models: Resources not found")
+	InvalidId     = errors.New("models: ID provided is invalid")
+	InvalidPwd    = errors.New("models: incorrect user or pwd provided")
+	userPwdPepper = "mqtoc"
 )
 
 type UserService struct {
@@ -54,8 +57,10 @@ func (us *UserService) Close() {
 
 type User struct {
 	gorm.Model
-	Name  string
-	Email string `gorm:"not null; unique_index"`
+	Name      string
+	Email     string `gorm:"not null; unique_index"`
+	Password  string `gorm:"-"`
+	HashedPwd string `gorm:"not null"`
 }
 
 func first(db *gorm.DB, dst interface{}) error {
@@ -92,6 +97,14 @@ func (us *UserService) ByEmail(email string) (*User, error) {
 }
 
 func (us *UserService) Create(user *User) error {
+	hashedBytes, err := bcrypt.GenerateFromPassword(
+		[]byte(user.Password+userPwdPepper), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	user.HashedPwd = string(hashedBytes)
+	user.Password = ""
 	return us.db.Create(&user).Error
 }
 
@@ -107,4 +120,21 @@ func (us *UserService) Delete(id uint) error {
 	user := User{Model: gorm.Model{ID: id}}
 
 	return us.db.Delete(&user).Error
+}
+
+func (us *UserService) Authenticate(email, pwd string) (*User, error) {
+	foundUser, err := us.ByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(foundUser.HashedPwd), []byte(pwd+userPwdPepper))
+	switch err {
+	case nil:
+		return foundUser, nil
+	case bcrypt.ErrMismatchedHashAndPassword:
+		return nil, InvalidPwd
+	default:
+		return nil, err
+	}
 }

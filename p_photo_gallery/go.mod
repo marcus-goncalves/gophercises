@@ -16,3 +16,5 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	gorm.io/driver/mysql v1.2.2 // direct
 )
+
+require golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce // indirect
